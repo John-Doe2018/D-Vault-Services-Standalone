@@ -1,11 +1,14 @@
 package com.kirat.solutions.service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.transform.TransformerException;
 
 import org.json.simple.JSONObject;
@@ -68,4 +71,13 @@ public class BinderService {
 		return document;
 	}
 
+	@POST
+	@Path("getPDF")
+	@Produces("application/pdf")
+	public Response getPDF(String pathName) throws FileNotFoundException, IOException, ParseException {
+		File file = new File(pathName);
+		ResponseBuilder response = Response.ok((Object) file);
+		response.header("Content-Disposition", "attachment; filename=test.pdf");
+		return response.build();
+	}
 }
