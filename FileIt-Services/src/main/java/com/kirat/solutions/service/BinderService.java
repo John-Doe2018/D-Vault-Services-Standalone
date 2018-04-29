@@ -17,9 +17,11 @@ import org.json.simple.parser.ParseException;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.CreateBinderRequest;
 import com.kirat.solutions.domain.CreateBinderResponse;
+import com.kirat.solutions.domain.SearchBookResponse;
 import com.kirat.solutions.domain.UpdateBookRequest;
 import com.kirat.solutions.processor.BookTreeProcessor;
 import com.kirat.solutions.processor.DeleteBookProcessor;
+import com.kirat.solutions.processor.LookupBookProcessor;
 import com.kirat.solutions.processor.TransformationProcessor;
 import com.kirat.solutions.processor.UpdateMasterJson;
 
@@ -76,5 +78,16 @@ public class BinderService {
 		ResponseBuilder response = Response.ok((Object) file);
 		response.header("Content-Disposition", "attachment; filename=test.pdf");
 		return response.build();
+	}
+
+	@POST
+	@Path("searchBook")
+	public SearchBookResponse searchBook(String bookname) {
+		SearchBookResponse bookResponse = new SearchBookResponse();
+		JSONObject jsonObject = null;
+		LookupBookProcessor lookupBookProcessor = new LookupBookProcessor();
+		jsonObject = lookupBookProcessor.lookupBookbyName(bookname);
+		bookResponse.setJsonObject(jsonObject);
+		return bookResponse;
 	}
 }
