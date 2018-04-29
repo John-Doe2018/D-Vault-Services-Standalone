@@ -3,6 +3,7 @@ package com.kirat.solutions.processor;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,20 +14,23 @@ import com.kirat.solutions.util.FileInfoPropertyReader;
 
 public class DeleteBookProcessor {
 
-	public String deleteBookProcessor (String deleteBookRequest) throws IOException, ParseException {
+	@SuppressWarnings("unchecked")
+	public String deleteBookProcessor(String deleteBookRequest) throws IOException, ParseException {
 		JSONObject parentObj = new JSONObject();
 		String deleteMsg = null;
 		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
 		JSONParser parser = new JSONParser();
-		JSONObject array = (JSONObject) parser.parse(new FileReader(filePath));
+		FileReader oFileReader = new FileReader(filePath);
+		JSONObject array = (JSONObject) parser.parse(oFileReader);
+		oFileReader.close();
 		JSONArray jsonArray = (JSONArray) array.get("BookList");
-		for (Object obj : jsonArray)
-		{
-			JSONObject book = (JSONObject) obj;
-			if(book.containsKey(deleteBookRequest)) {
-				jsonArray.remove(obj);
+		for (Iterator<Object> iterator = jsonArray.iterator(); iterator.hasNext();) {
+			JSONObject book = (JSONObject) iterator.next();
+			if (book.containsKey(deleteBookRequest)) {
+				iterator.remove();
+				deleteMsg = "Deleted Successfully";
 			}
-	}
+		}
 		parentObj.put("BookList", jsonArray);
 		FileWriter jsonFile = new FileWriter(filePath);
 		jsonFile.write(parentObj.toJSONString());
@@ -34,6 +38,5 @@ public class DeleteBookProcessor {
 		jsonFile.close();
 		return deleteMsg;
 	}
-	
+
 }
-	

@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.CreateBinderRequest;
 import com.kirat.solutions.domain.CreateBinderResponse;
-import com.kirat.solutions.domain.DeleteBookRequest;
 import com.kirat.solutions.domain.UpdateBookRequest;
 import com.kirat.solutions.processor.BookTreeProcessor;
 import com.kirat.solutions.processor.DeleteBookProcessor;
@@ -52,10 +51,8 @@ public class BinderService {
 
 	@POST
 	@Path("delete")
-	public String deleteBinder(DeleteBookRequest deleteBookRequest)
-			throws TransformerException, IOException, ParseException {
+	public String deleteBinder(String bookName) throws TransformerException, IOException, ParseException {
 		String succssMsg;
-		String bookName = deleteBookRequest.getBookName();
 		DeleteBookProcessor deleteBookProcessor = new DeleteBookProcessor();
 		succssMsg = deleteBookProcessor.deleteBookProcessor(bookName);
 		// append in MasterJson

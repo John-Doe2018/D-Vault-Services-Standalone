@@ -27,7 +27,9 @@ public class helloWorldService {
 	public String getMasterJson() throws FileNotFoundException, IOException, ParseException {
 		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
 		JSONParser parser = new JSONParser();
-		Object object = parser.parse(new FileReader(filePath));
+		FileReader oFileReader = new FileReader(filePath);
+		Object object = parser.parse(oFileReader);
+		oFileReader.close();
 		JSONObject jsonObject = (JSONObject) object;
 		return jsonObject.toJSONString();
 	}

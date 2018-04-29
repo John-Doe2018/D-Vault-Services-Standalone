@@ -32,7 +32,9 @@ public class BookTreeProcessor {
 		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
 		String requiredXmlPath = "";
 		JSONParser parser = new JSONParser();
-		JSONObject array = (JSONObject) parser.parse(new FileReader(filePath));
+		FileReader oFileReader = new FileReader(filePath);
+		JSONObject array = (JSONObject) parser.parse(oFileReader);
+		oFileReader.close();
 		JSONArray jsonArray = (JSONArray) array.get("BookList");
 		for (Object obj : jsonArray) {
 			JSONObject book = (JSONObject) obj;
