@@ -24,25 +24,31 @@ import org.w3c.dom.Element;
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.Children;
+import com.kirat.solutions.util.FileItException;
 import com.kirat.solutions.util.FileUtil;
 
 public class TransformationProcessor {
 
 	public BinderList processHtmlToBinderXml(String htmlContent)
-			throws TransformerException, JsonParseException, JsonMappingException, IOException {
+			throws FileItException  {
 		BinderList binderObject = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonFactory f = new JsonFactory();
-		JsonParser jp = f.createJsonParser(htmlContent);
-		jp.nextToken();
-		while (jp.nextToken() == JsonToken.FIELD_NAME) {
-			binderObject = objectMapper.readValue(jp, BinderList.class);
+		JsonParser jp = null;
+		try {
+			jp = f.createJsonParser(htmlContent);
+			jp.nextToken();
+			while (jp.nextToken() == JsonToken.FIELD_NAME) {
+				binderObject = objectMapper.readValue(jp, BinderList.class);
+			}
+		} catch (IOException e) {
+			throw new FileItException(e.getMessage()) ;
 		}
 		prepareBinderXML(binderObject);
 		return binderObject;
 	}
 
-	public static void prepareBinderXML(BinderList binderlist) {
+	public static void prepareBinderXML(BinderList binderlist) throws FileItException {
 		String xmlFilePath = FileUtil.createDynamicFilePath(binderlist.getName());
 		try {
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -93,7 +99,7 @@ public class TransformationProcessor {
 			StreamResult streamResult = new StreamResult(new File(xmlFilePath));
 			transformer.transform(domSource, streamResult);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new FileItException(e.getMessage()) ;
 		}
 
 	}

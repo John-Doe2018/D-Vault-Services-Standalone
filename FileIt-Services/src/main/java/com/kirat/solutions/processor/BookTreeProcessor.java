@@ -16,25 +16,24 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.kirat.solutions.util.FileInfoPropertyReader;
+import com.kirat.solutions.util.FileItException;
 
 public class BookTreeProcessor {
 
-	public JSONObject processBookXmltoDoc(String bookName) throws FileNotFoundException, IOException, ParseException {
+	public JSONObject processBookXmltoDoc(String bookName) throws FileItException {
 		String line = "", str = "";
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = null;
+		JSONObject json;
 		try {
 			documentBuilder = documentFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
 		String requiredXmlPath = "";
 		JSONParser parser = new JSONParser();
-		FileReader oFileReader = new FileReader(filePath);
-		JSONObject array = (JSONObject) parser.parse(oFileReader);
-		oFileReader.close();
+		JSONObject array = null;
+			array = (JSONObject) parser.parse(new FileReader(filePath));
+		
 		JSONArray jsonArray = (JSONArray) array.get("BookList");
 		for (Object obj : jsonArray) {
 			JSONObject book = (JSONObject) obj;
@@ -43,13 +42,20 @@ public class BookTreeProcessor {
 				requiredXmlPath = (String) jsonObject.get("Path");
 			}
 		}
-		BufferedReader br = new BufferedReader(new FileReader(requiredXmlPath));
-		while ((line = br.readLine()) != null) {
-			str += line;
-		}
+		BufferedReader br =  null;
+			br = new BufferedReader(new FileReader(requiredXmlPath));
+		
+			while ((line = br.readLine()) != null) {
+				str += line;
+			}
 		br.close();
 		org.json.JSONObject jsondata = XML.toJSONObject(str);
-		JSONObject json = (JSONObject) parser.parse(jsondata.toString());
+		
+			json = (JSONObject) parser.parse(jsondata.toString());
+			} catch (ParserConfigurationException | ParseException | IOException e) {
+				// TODO Auto-generated catch block
+				throw new FileItException(e.getMessage());
+			}
 		return json;
 	}
 
