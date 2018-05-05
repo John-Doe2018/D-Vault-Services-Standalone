@@ -1,7 +1,5 @@
 package com.kirat.solutions.util;
 
-import java.util.Map;
-
 public class FileItException  extends Exception{
 
 	/**

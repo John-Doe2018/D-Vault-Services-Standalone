@@ -8,8 +8,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.kirat.solutions.Constants.ErrorCodeConstants;
-import com.kirat.solutions.util.ErrorMessageReader;
 import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
 
