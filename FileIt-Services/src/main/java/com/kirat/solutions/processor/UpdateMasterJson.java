@@ -10,8 +10,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.Constants.ErrorCodeConstants;
 import com.kirat.solutions.domain.BinderList;
+import com.kirat.solutions.logger.FILEITLogger;
+import com.kirat.solutions.logger.FILEITLoggerFactory;
 import com.kirat.solutions.util.ErrorMessageReader;
 import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
@@ -19,9 +22,10 @@ import com.kirat.solutions.util.FileUtil;
 import com.kirat.solutions.util.ReadJsonUtil;
 
 public class UpdateMasterJson {
-
+	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(UpdateMasterJson.class);
 	@SuppressWarnings("unchecked")
 	public String prepareMasterJson(BinderList bookObject) throws FileItException {
+		fileItLogger.info("Entering in to Update Master Json Processor");
 		JSONParser parser = new JSONParser();
 		JSONObject obj = new JSONObject();
 		JSONObject superObj = new JSONObject();
@@ -51,7 +55,6 @@ public class UpdateMasterJson {
 				superObj.put(bookObject.getName(), obj);
 				jsonArray.add(superObj);
 				parentObj.put("BookList", jsonArray);
-				/*array.put(jsonArray);*/
 				FileWriter jsonFile;
 				
 					jsonFile = new FileWriter(filePath);
@@ -59,10 +62,8 @@ public class UpdateMasterJson {
 					jsonFile.flush();
 					jsonFile.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					throw new FileItException(e.getMessage());
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					throw new FileItException(e.getMessage());
 				}
 			}
@@ -87,7 +88,7 @@ public class UpdateMasterJson {
 			else {
 				throw new FileItException(ErrorCodeConstants.ERR_CODE_0002, ErrorMessageReader.getInstance().getString(ErrorCodeConstants.ERR_CODE_0002));
 			}
+		fileItLogger.info("Exiting in to Update Master Json Processor");
 		return bookObject.getName();
 		}
-
 	}

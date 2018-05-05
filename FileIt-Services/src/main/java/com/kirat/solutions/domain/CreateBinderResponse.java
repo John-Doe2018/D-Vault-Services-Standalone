@@ -1,6 +1,6 @@
 package com.kirat.solutions.domain;
 
-public class CreateBinderResponse {
+public class CreateBinderResponse extends Response{
 
 	String SuccessMsg;
 

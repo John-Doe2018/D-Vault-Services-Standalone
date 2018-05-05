@@ -1,6 +1,7 @@
 package com.kirat.solutions.processor;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -14,12 +15,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.kirat.solutions.logger.FILEITLogger;
+import com.kirat.solutions.logger.FILEITLoggerFactory;
 import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
 
 public class BookTreeProcessor {
-
+	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(BookTreeProcessor.class);
 	public JSONObject processBookXmltoDoc(String bookName) throws FileItException {
+		fileItLogger.info("Entering to Book Tree Processor");
+		
 		String line = "", str = "";
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = null;

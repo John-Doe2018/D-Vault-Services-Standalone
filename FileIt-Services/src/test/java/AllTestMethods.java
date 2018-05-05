@@ -1,4 +1,4 @@
-import java.io.File;
+/*import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -20,11 +20,11 @@ import org.w3c.dom.Element;
 
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.BinderList;
-import com.kirat.solutions.domain.Children;
+import com.kirat.solutions.domain.Children;*/
 
 
 public class AllTestMethods {
-
+/*
 	public static void main(String[] args) throws JsonParseException, IOException {
 		// TODO Auto-generated method stub
 		String htmlContent = "[{\"id\": 1,\"name\": \"root1\",\"classification\": \"Math&\",\"children\": [{\"id\": 2,\"name\": \"child1\",\"path\": \"E:/abc.pdf\",\"type\": \"Application/PDF\",\"version\": \"1.0\",\"note\":\"This is a note\"}]}]";
@@ -38,7 +38,7 @@ public class AllTestMethods {
 		while (jp.nextToken() == JsonToken.START_OBJECT) {
 			System.out.println(jp.getCurrentName());
 			System.out.println(jp.getCurrentToken());
-		/*	System.out.println(jp.getCurrentName());*/
+			System.out.println(jp.getCurrentName());
 			BinderList binderObject = objectMapper.readValue(jp, BinderList.class);
 			System.out.println(binderObject.getName());
 			System.out.println(binderObject.getClassification());
@@ -92,8 +92,8 @@ public class AllTestMethods {
 						topicref.appendChild(topic);
 					}
 					
-					/*Element topic = document.createElement("topic");
-					topicref.appendChild(topic);*/
+					Element topic = document.createElement("topic");
+					topicref.appendChild(topic);
 					// create the xml file
 					//transform the DOM Object to an XML File
 					TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -112,5 +112,5 @@ public class AllTestMethods {
 		
 		
 		
-	}
+	}*/
 }

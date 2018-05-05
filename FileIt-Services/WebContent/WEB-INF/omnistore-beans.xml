@@ -13,6 +13,6 @@
 
 	<import resource="hello-world.xml"></import>
 	<import resource="binder-beans.xml"></import>
-	<bean id="jaxbJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"></bean>
-	
+	<bean id="jaxbJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+	<bean id="exceptionProvider" class="com.kirat.solutions.util.ServiceExceptionMapper"/>
 </beans>

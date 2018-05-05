@@ -3,6 +3,7 @@ package com.kirat.solutions.processor;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -11,13 +12,15 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import com.kirat.solutions.Constants.BinderConstants;
+import com.kirat.solutions.domain.FileItContext;
 import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
 
 public class ContentProcessor {
-	
+	FileItContext fileItContext;
+	List<String> paths = new ArrayList<String>();
 	private static ContentProcessor INSTANCE;
-	
+	static int pagecounter = 0; 
 	public static synchronized ContentProcessor getInstance() {
 		if (null == INSTANCE) {
 			INSTANCE = new ContentProcessor();
@@ -28,27 +31,32 @@ public class ContentProcessor {
 	public void processContentImage(String bookName ) throws FileItException{
 		PDDocument document = null;
 		BufferedImage bufferedImage = null;
-		int i = 0;
+		//int i = 0;
 		String extension = BinderConstants.IMG_EXTENSION;
-		
+		paths = (List<String>) fileItContext.get(BinderConstants.CONTXT_PATH_NAMES);
+
 		try {
-			document = PDDocument.load("D:\\PrivacyByDesignVer1.pdf");
-		List<PDPage> pages = document.getDocumentCatalog().getAllPages();
-		//int count = document.getDocumentCatalog().getAllPages().size();
-		for(PDPage page :pages) {
-			i++;
-			String imagePath = createDyanmicImagePath(i,bookName,extension);
-			bufferedImage = page.convertToImage();
-			File outputFile = new File(imagePath);
-			ImageIO.write(bufferedImage, "jpg", outputFile);
-		}
-		//PDPage page = pages.get(0); //first one
+			for(String path : paths) {
+				//i = counter;
+				document = PDDocument.load(path);
+				List<PDPage> pages = document.getDocumentCatalog().getAllPages();
+				//int count = document.getDocumentCatalog().getAllPages().size();
+				for(PDPage page :pages) {
+					pagecounter++;
+					String imagePath = createDyanmicImagePath(pagecounter,bookName,extension);
+					bufferedImage = page.convertToImage();
+					File outputFile = new File(imagePath);
+					ImageIO.write(bufferedImage, "jpg", outputFile);
+					//counter += i; 
+				}
+			}
+			//PDPage page = pages.get(0); //first one
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new FileItException(e.getMessage());
 		}
-		
-		
+
+
 	}
 	public static String createDyanmicImagePath (int i , String bookName,String extension) {
 		boolean isDirectory = false;
@@ -66,5 +74,5 @@ public class ContentProcessor {
 		absoluteImgPath = fullContentDirectory.concat("\\"+counter.concat(extension));
 		return absoluteImgPath;
 	}
-	
+
 }

@@ -1,5 +1,4 @@
-
-import java.awt.image.BufferedImage;
+/*import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -13,9 +12,9 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
-
+*/
 public class TestPDFToImage {
-
+/*
 	public static void main(String[] args) throws FileItException{
 		// TODO Auto-generated method stub
 		PDDocument document = null;
@@ -57,6 +56,6 @@ public class TestPDFToImage {
 		}
 		absoluteImgPath = fullContentDirectory.concat("\\"+counter.concat(extension));
 		return absoluteImgPath;
-	}
+	}*/
 }
 

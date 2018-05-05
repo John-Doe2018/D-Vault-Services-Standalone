@@ -1,12 +1,12 @@
-import java.io.File;
+/*import java.io.File;*/
 
 public class CreateMasterJson {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//String htmlContent = "[{\"id\": 1,\"name\": \"root1\",\"classification\": \"Math&\",\"children\": [{\"id\": 2,\"name\": \"child1\",\"path\": \"E:/abc.pdf\",\"type\": \"Application/PDF\",\"version\": \"1.0\",\"note\":\"This is a note\"}]}]";
 		
-		/*JSONObject obj = new JSONObject();
+		JSONObject obj = new JSONObject();
         obj.put("Name", binderObject.getName());
         obj.put("Classification",binderObject.getClassification());
         obj.put("Path", "D:\\files\\xmlFile.xml");
@@ -20,7 +20,7 @@ public class CreateMasterJson {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 		//Create a dynamic Xml file
 		String staticpath = "D:\\files";
 		String extension = ".xml";
@@ -30,5 +30,5 @@ public class CreateMasterJson {
 		System.out.println(file.getAbsolutePath());
 		
 	}
-
+*/
 }

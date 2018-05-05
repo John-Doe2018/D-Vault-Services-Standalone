@@ -1,6 +1,6 @@
 package com.kirat.solutions.domain;
 
-public class SearchBookRequest {
+public class SearchBookRequest extends Response{
 
 	String bookName;
 

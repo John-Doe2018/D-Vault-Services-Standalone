@@ -19,7 +19,9 @@
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<ref bean="jaxbJsonProvider"></ref>
+			<ref bean="exceptionProvider"></ref>
 	</jaxrs:providers>
+	
 	</jaxrs:server>
 	
 </beans>

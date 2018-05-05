@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.xml.transform.TransformerException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -16,6 +17,8 @@ import org.json.simple.parser.ParseException;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.CreateBinderRequest;
 import com.kirat.solutions.domain.CreateBinderResponse;
+import com.kirat.solutions.domain.DeleteBookRequest;
+import com.kirat.solutions.domain.SearchBookRequest;
 import com.kirat.solutions.domain.SearchBookResponse;
 import com.kirat.solutions.domain.UpdateBookRequest;
 import com.kirat.solutions.processor.BookTreeProcessor;
@@ -34,14 +37,14 @@ public class BinderService {
 	public CreateBinderResponse createBinder(CreateBinderRequest createBinderRequest) throws FileItException {
 		CreateBinderResponse createBinderResponse = new CreateBinderResponse();
 		String htmlContent = createBinderRequest.getHtmlContent();
-		String bookName = null;
+		String bookName =  null;
 		BinderList listOfBinderObj;
 		TransformationProcessor transformationProcessor = new TransformationProcessor();
 		listOfBinderObj = transformationProcessor.processHtmlToBinderXml(htmlContent);
 		// append in MasterJson
 		UpdateMasterJson updateMasterJson = new UpdateMasterJson();
 		bookName = updateMasterJson.prepareMasterJson(listOfBinderObj);
-		// Prepare the Content Structure of the book with image
+		//Prepare the Content Structure of the book with image 
 		ContentProcessor contentProcessor = ContentProcessor.getInstance();
 		contentProcessor.processContentImage(bookName);
 		createBinderResponse.setSuccessMsg("Binder Successfully Created.");
@@ -58,9 +61,10 @@ public class BinderService {
 
 	@POST
 	@Path("delete")
-	public String deleteBinder(String bookName)
-			throws FileItException, IOException, ParseException {
+	public String deleteBinder(DeleteBookRequest deleteBookRequest)
+			throws FileItException {
 		String succssMsg;
+		String bookName = deleteBookRequest.getBookName();
 		DeleteBookProcessor deleteBookProcessor = new DeleteBookProcessor();
 		succssMsg = deleteBookProcessor.deleteBookProcessor(bookName);
 		// append in MasterJson
@@ -70,7 +74,7 @@ public class BinderService {
 	@POST
 	@Path("getBookTreeDetail")
 	@Produces("application/json")
-	public JSONObject BookTreeDetail(String bookName) throws FileItException {
+	public JSONObject BookTreeDetail(String bookName) throws  FileItException {
 		BookTreeProcessor bookTreeProcessor = new BookTreeProcessor();
 		JSONObject document = bookTreeProcessor.processBookXmltoDoc(bookName);
 		return document;
@@ -89,8 +93,9 @@ public class BinderService {
 
 	@POST
 	@Path("searchBook")
-	public SearchBookResponse searchBook(String bookName) throws FileItException {
+	public SearchBookResponse searchBook(SearchBookRequest searchBookRequest) throws FileItException{
 		SearchBookResponse bookResponse = new SearchBookResponse();
+		String bookName = searchBookRequest.getBookName();
 		JSONObject jsonObject = null;
 		LookupBookProcessor lookupBookProcessor = new LookupBookProcessor();
 		jsonObject = lookupBookProcessor.lookupBookbyName(bookName);

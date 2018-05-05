@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//LOGGER" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration>
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="error" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%5p %d{yyyy-MM-dd HH:mm:ss:S z} %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+	<appender name="defaultFileAppender" class="org.apache.log4j.FileAppender">
+		<param name="threshold" value="info" />
+        <param name="file" value="ApplicationLog//rootlog.log" />
+        <param name="append" value="false" />    
+        <param name="DatePattern" value=".yyyy-MM-dd" />    
+     	<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %d{yyyy-MM-dd HH:mm:ss:S z} %m\r\n" />
+		</layout>
+    </appender>
+	
+	<appender name="FileItAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="info" />
+		<param name="File" value="ApplicationLog//fileIt.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %d{yyyy-MM-dd HH:mm:ss:S z} %m\r\n" />
+		</layout>
+	</appender>
+	<!--<appender name="batchLogAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="error" />
+		<param name="File" value="log//batch.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %d{yyyy-MM-dd HH:mm:ss:S z} %m\r\n" />
+		</layout>
+	</appender>
+	<appender name="requestResponseLoggerAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="info" />
+		<param name="File" value="log//requestResponse.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p %d{yyyy-MM-dd HH:mm:ss:S z} %m\r\n" />
+		</layout>
+	</appender>	-->
+   
+	<logger name="fileItlog" additivity="true">
+		<level value="info" />
+		<appender-ref ref="FileItAppender" />
+	</logger>
+	
+	<!-- <logger name="requestResponseLogger" additivity="false">
+		<level value="info" />
+		<appender-ref ref="requestResponseLoggerAppender" />
+	</logger> -->
+
+	<root>
+		<level value="info" />
+		<appender-ref ref="defaultFileAppender" />
+	</root>
+	
+	<!-- <logger name="org.hibernate">
+  		<level value="error"/> 
+	</logger> -->
+	
+	<logger name="org.springframework">
+  		<level value="error"/> 
+	</logger>
+</log4j:configuration>

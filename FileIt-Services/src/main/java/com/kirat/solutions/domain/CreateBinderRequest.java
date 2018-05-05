@@ -1,6 +1,8 @@
 package com.kirat.solutions.domain;
 
-public class CreateBinderRequest {
+import java.util.List;
+
+public class CreateBinderRequest extends Response{
 
 	String htmlContent; 
 

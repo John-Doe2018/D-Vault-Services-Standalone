@@ -2,18 +2,23 @@ package com.kirat.solutions.processor;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -21,13 +26,19 @@ import org.w3c.dom.Element;
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.Children;
+import com.kirat.solutions.domain.FileItContext;
+import com.kirat.solutions.logger.FILEITLogger;
+import com.kirat.solutions.logger.FILEITLoggerFactory;
 import com.kirat.solutions.util.FileItException;
 import com.kirat.solutions.util.FileUtil;
 
 public class TransformationProcessor {
-
+	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(TransformationProcessor.class);
+	FileItContext fileItContext;
+	List<String> pathNamesList = new ArrayList<String>();
 	public BinderList processHtmlToBinderXml(String htmlContent)
 			throws FileItException  {
+		fileItLogger.info("Entering in to processHtmlToBinderXml");
 		BinderList binderObject = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonFactory f = new JsonFactory();
@@ -42,10 +53,11 @@ public class TransformationProcessor {
 			throw new FileItException(e.getMessage()) ;
 		}
 		prepareBinderXML(binderObject);
+		fileItLogger.info("Exiting in to processHtmlToBinderXml");
 		return binderObject;
 	}
 
-	public static void prepareBinderXML(BinderList binderlist) throws FileItException {
+	public void prepareBinderXML(BinderList binderlist) throws FileItException {
 		String xmlFilePath = FileUtil.createDynamicFilePath(binderlist.getName());
 		try {
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -87,7 +99,10 @@ public class TransformationProcessor {
 				topic.setAttribute(BinderConstants.VERSION, child.getVersion());
 				topic.setAttribute(BinderConstants.ID, (String.valueOf(child.getId())));
 				topicref.appendChild(topic);
+				pathNamesList.add(child.getPath());
 			}
+			FileItContext.add(BinderConstants.CONTXT_PATH_NAMES, pathNamesList);
+			
 			// create the xml file
 			// transform the DOM Object to an XML File
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
