@@ -88,7 +88,7 @@ public class BinderService {
 	@Produces("application/pdf")
 	public Response getPDF(String pathName) throws FileNotFoundException, IOException, ParseException {
 		pathName = FileUtil.correctFilePath(pathName);
-		File file = new File(pathName);
+		File file = new File(pathName.substring(1, pathName.length() - 1));
 		ResponseBuilder response = Response.ok((Object) file);
 		response.header("Content-Disposition", "attachment; filename=PrivacyByDesignVer1.0.pdf");
 		return response.build();
