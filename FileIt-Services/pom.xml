@@ -121,7 +121,7 @@
 	</dependencies>
 	<build>
 	<finalName>FileIt-Services</finalName>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

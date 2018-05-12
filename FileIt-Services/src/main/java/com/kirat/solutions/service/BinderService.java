@@ -9,7 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.xml.transform.TransformerException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -37,14 +36,14 @@ public class BinderService {
 	public CreateBinderResponse createBinder(CreateBinderRequest createBinderRequest) throws FileItException {
 		CreateBinderResponse createBinderResponse = new CreateBinderResponse();
 		String htmlContent = createBinderRequest.getHtmlContent();
-		String bookName =  null;
-		BinderList listOfBinderObj;
+		String bookName = null;
 		TransformationProcessor transformationProcessor = new TransformationProcessor();
-		listOfBinderObj = transformationProcessor.processHtmlToBinderXml(htmlContent);
+		BinderList listOfBinderObj = transformationProcessor.createBinderList(htmlContent);
+		transformationProcessor.processHtmlToBinderXml(listOfBinderObj);
 		// append in MasterJson
 		UpdateMasterJson updateMasterJson = new UpdateMasterJson();
 		bookName = updateMasterJson.prepareMasterJson(listOfBinderObj);
-		//Prepare the Content Structure of the book with image 
+		// Prepare the Content Structure of the book with image
 		ContentProcessor contentProcessor = ContentProcessor.getInstance();
 		contentProcessor.processContentImage(bookName);
 		createBinderResponse.setSuccessMsg("Binder Successfully Created.");
@@ -55,26 +54,30 @@ public class BinderService {
 	@Path("update")
 	public String updateBinder(UpdateBookRequest updateBookRequest) throws FileItException {
 		// append in MasterJson
-		String s = "Serice was run Successfully";
-		return s;
+		TransformationProcessor transformationProcessor = new TransformationProcessor();
+		DeleteBookProcessor deleteBookProcessor = new DeleteBookProcessor();
+		UpdateMasterJson updateMasterJson = new UpdateMasterJson();
+		BinderList BinderObj = transformationProcessor.createBinderList(updateBookRequest.getHtmlContent());
+		transformationProcessor.processHtmlToBinderXml(BinderObj);
+		deleteBookProcessor.deleteBookProcessor(updateBookRequest.getId());
+		updateMasterJson.prepareMasterJson(BinderObj);
+		return "Success";
 	}
 
 	@POST
 	@Path("delete")
-	public String deleteBinder(DeleteBookRequest deleteBookRequest)
-			throws FileItException {
-		String succssMsg;
+	@Produces("application/json")
+	public JSONObject deleteBinder(DeleteBookRequest deleteBookRequest) throws FileItException {
 		String bookName = deleteBookRequest.getBookName();
 		DeleteBookProcessor deleteBookProcessor = new DeleteBookProcessor();
-		succssMsg = deleteBookProcessor.deleteBookProcessor(bookName);
-		// append in MasterJson
+		JSONObject succssMsg = deleteBookProcessor.deleteBookProcessor(bookName);
 		return succssMsg;
 	}
 
 	@POST
 	@Path("getBookTreeDetail")
 	@Produces("application/json")
-	public JSONObject BookTreeDetail(String bookName) throws  FileItException {
+	public JSONObject BookTreeDetail(String bookName) throws FileItException {
 		BookTreeProcessor bookTreeProcessor = new BookTreeProcessor();
 		JSONObject document = bookTreeProcessor.processBookXmltoDoc(bookName);
 		return document;
@@ -93,7 +96,7 @@ public class BinderService {
 
 	@POST
 	@Path("searchBook")
-	public SearchBookResponse searchBook(SearchBookRequest searchBookRequest) throws FileItException{
+	public SearchBookResponse searchBook(SearchBookRequest searchBookRequest) throws FileItException {
 		SearchBookResponse bookResponse = new SearchBookResponse();
 		String bookName = searchBookRequest.getBookName();
 		JSONObject jsonObject = null;

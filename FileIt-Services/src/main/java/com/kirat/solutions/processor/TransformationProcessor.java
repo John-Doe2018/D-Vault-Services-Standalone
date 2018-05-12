@@ -36,11 +36,11 @@ public class TransformationProcessor {
 	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(TransformationProcessor.class);
 	FileItContext fileItContext;
 	List<String> pathNamesList = new ArrayList<String>();
-	public BinderList processHtmlToBinderXml(String htmlContent)
+	public boolean processHtmlToBinderXml(BinderList binderObject)
 			throws FileItException  {
 		fileItLogger.info("Entering in to processHtmlToBinderXml");
-		BinderList binderObject = null;
-		ObjectMapper objectMapper = new ObjectMapper();
+		/*BinderList binderObject = null;*/
+		/*ObjectMapper objectMapper = new ObjectMapper();
 		JsonFactory f = new JsonFactory();
 		JsonParser jp = null;
 		try {
@@ -51,10 +51,10 @@ public class TransformationProcessor {
 			}
 		} catch (IOException e) {
 			throw new FileItException(e.getMessage()) ;
-		}
+		}*/
 		prepareBinderXML(binderObject);
 		fileItLogger.info("Exiting in to processHtmlToBinderXml");
-		return binderObject;
+		return true;
 	}
 
 	public void prepareBinderXML(BinderList binderlist) throws FileItException {
@@ -114,6 +114,23 @@ public class TransformationProcessor {
 			throw new FileItException(e.getMessage()) ;
 		}
 
+	}
+	
+	public BinderList createBinderList(String htmlContent) throws FileItException{
+		BinderList binderObject = null;
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonFactory f = new JsonFactory();
+		JsonParser jp = null;
+		try {
+			jp = f.createJsonParser(htmlContent);
+			jp.nextToken();
+			while (jp.nextToken() == JsonToken.FIELD_NAME) {
+				binderObject = objectMapper.readValue(jp, BinderList.class);
+			}
+		} catch (IOException e) {
+			throw new FileItException(e.getMessage());
+		}
+		return binderObject;
 	}
 
 }
