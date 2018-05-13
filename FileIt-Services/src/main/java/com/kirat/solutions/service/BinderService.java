@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.kirat.solutions.domain.AddFileRequest;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.CreateBinderRequest;
 import com.kirat.solutions.domain.CreateBinderResponse;
@@ -20,6 +21,7 @@ import com.kirat.solutions.domain.DeleteBookRequest;
 import com.kirat.solutions.domain.SearchBookRequest;
 import com.kirat.solutions.domain.SearchBookResponse;
 import com.kirat.solutions.domain.UpdateBookRequest;
+import com.kirat.solutions.processor.AddFileProcessor;
 import com.kirat.solutions.processor.BookTreeProcessor;
 import com.kirat.solutions.processor.ContentProcessor;
 import com.kirat.solutions.processor.DeleteBookProcessor;
@@ -104,6 +106,19 @@ public class BinderService {
 		jsonObject = lookupBookProcessor.lookupBookbyName(bookName);
 		bookResponse.setJsonObject(jsonObject);
 		return bookResponse;
+	}
+
+	@POST
+	@Path("addFile")
+	@Produces("application/json")
+	public JSONObject addFile(AddFileRequest oAddFileRequest) throws FileItException {
+		AddFileProcessor oAddFileProcessor = new AddFileProcessor();
+		oAddFileProcessor.addFilesToBinder(oAddFileRequest);
+		ContentProcessor contentProcessor = ContentProcessor.getInstance();
+		contentProcessor.processContentImage(oAddFileRequest.getBinderName());
+		JSONObject object = new JSONObject();
+		object.put("Success", "File Added Successfully");
+		return object;
 	}
 
 }

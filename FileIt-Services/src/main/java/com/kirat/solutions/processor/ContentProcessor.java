@@ -20,58 +20,56 @@ public class ContentProcessor {
 	FileItContext fileItContext;
 	List<String> paths = new ArrayList<String>();
 	private static ContentProcessor INSTANCE;
-	static int pagecounter = 0; 
+	static int pagecounter = 0;
+
 	public static synchronized ContentProcessor getInstance() {
 		if (null == INSTANCE) {
 			INSTANCE = new ContentProcessor();
 		}
 		return INSTANCE;
-
 	}
-	public void processContentImage(String bookName ) throws FileItException{
+
+	@SuppressWarnings({ "static-access", "unchecked" })
+	public void processContentImage(String bookName) throws FileItException {
 		PDDocument document = null;
 		BufferedImage bufferedImage = null;
-		//int i = 0;
 		String extension = BinderConstants.IMG_EXTENSION;
 		paths = (List<String>) fileItContext.get(BinderConstants.CONTXT_PATH_NAMES);
 
 		try {
-			for(String path : paths) {
-				//i = counter;
+			for (String path : paths) {
+				// i = counter;
 				document = PDDocument.load(path);
 				List<PDPage> pages = document.getDocumentCatalog().getAllPages();
-				//int count = document.getDocumentCatalog().getAllPages().size();
-				for(PDPage page :pages) {
+				// int count = document.getDocumentCatalog().getAllPages().size();
+				for (PDPage page : pages) {
 					pagecounter++;
-					String imagePath = createDyanmicImagePath(pagecounter,bookName,extension);
+					String imagePath = createDyanmicImagePath(pagecounter, bookName, extension);
 					bufferedImage = page.convertToImage();
 					File outputFile = new File(imagePath);
 					ImageIO.write(bufferedImage, "jpg", outputFile);
-					//counter += i; 
 				}
 			}
-			//PDPage page = pages.get(0); //first one
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			throw new FileItException(e.getMessage());
 		}
 
-
 	}
-	public static String createDyanmicImagePath (int i , String bookName,String extension) {
+
+	public static String createDyanmicImagePath(int i, String bookName, String extension) {
 		boolean isDirectory = false;
 		String fullContentDirectory = null;
 		String absoluteImgPath = null;
 
 		String counter = String.valueOf(i);
 		String staticPath = FileInfoPropertyReader.getInstance().getString("doc.static.path");
-		fullContentDirectory = staticPath.concat("\\"+bookName+"\\Images");
-		java.io.File file =  new File(fullContentDirectory);
+		fullContentDirectory = staticPath.concat("\\" + bookName + "\\Images");
+		java.io.File file = new File(fullContentDirectory);
 		isDirectory = file.isDirectory();
-		if(!isDirectory) {
+		if (!isDirectory) {
 			file.mkdirs();
 		}
-		absoluteImgPath = fullContentDirectory.concat("\\"+counter.concat(extension));
+		absoluteImgPath = fullContentDirectory.concat("\\" + counter.concat(extension));
 		return absoluteImgPath;
 	}
 
