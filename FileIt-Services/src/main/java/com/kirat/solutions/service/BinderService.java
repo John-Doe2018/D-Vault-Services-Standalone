@@ -2,7 +2,9 @@ package com.kirat.solutions.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -10,7 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.kirat.solutions.domain.AddFileRequest;
@@ -28,6 +32,7 @@ import com.kirat.solutions.processor.DeleteBookProcessor;
 import com.kirat.solutions.processor.LookupBookProcessor;
 import com.kirat.solutions.processor.TransformationProcessor;
 import com.kirat.solutions.processor.UpdateMasterJson;
+import com.kirat.solutions.util.FileInfoPropertyReader;
 import com.kirat.solutions.util.FileItException;
 import com.kirat.solutions.util.FileUtil;
 
@@ -119,6 +124,32 @@ public class BinderService {
 		JSONObject object = new JSONObject();
 		object.put("Success", "File Added Successfully");
 		return object;
+	}
+	
+	//Advance Search Added
+	
+	@POST
+	@Path("advancedSearch")
+	public JSONArray advancedSearch() throws Exception {
+		/*InputStream oInputStream = oCloudStorageConfig
+				.getFile(CloudPropertiesReader.getInstance().getString("bucket.name"), "test.JSON");
+		InputStream oInputStream = Reader.getInstance().getString("masterjson.file.path")
+		JSONParser parser = new JSONParser();
+		JSONObject array = null;
+		array = (JSONObject) parser.parse(new InputStreamReader(oInputStream));*/
+		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(filePath));
+		JSONArray jsonArray = (JSONArray) jsonObject.get("BookList");
+		JSONArray oArray = new JSONArray();
+		for (Object obj : jsonArray) {
+			JSONObject book = (JSONObject) obj;
+			Set<String> keys = book.keySet();
+			for (String s : keys) {
+				oArray.add(s);
+			}
+		}
+		return oArray;
 	}
 
 }
