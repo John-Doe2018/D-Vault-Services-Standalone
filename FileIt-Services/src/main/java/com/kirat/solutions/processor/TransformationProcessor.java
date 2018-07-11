@@ -3,7 +3,9 @@ package com.kirat.solutions.processor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -32,7 +34,7 @@ import com.kirat.solutions.util.FileUtil;
 public class TransformationProcessor {
 	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(TransformationProcessor.class);
 	FileItContext fileItContext;
-	List<String> pathNamesList = new ArrayList<String>();
+	Map<String, String> pathNamesList = new HashMap<String, String>();
 	public boolean processHtmlToBinderXml(BinderList binderObject)
 			throws FileItException  {
 		fileItLogger.info("Entering in to processHtmlToBinderXml");
@@ -96,10 +98,9 @@ public class TransformationProcessor {
 				topic.setAttribute(BinderConstants.VERSION, child.getVersion());
 				topic.setAttribute(BinderConstants.ID, (String.valueOf(child.getId())));
 				topicref.appendChild(topic);
-				pathNamesList.add(child.getPath());
+				pathNamesList.put(child.getName(), child.getPath());
 			}
-			FileItContext.add(BinderConstants.CONTXT_PATH_NAMES, pathNamesList);
-			
+			FileItContext.add(BinderConstants.CONTXT_DOC, pathNamesList);
 			// create the xml file
 			// transform the DOM Object to an XML File
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();

@@ -2,8 +2,8 @@ package com.kirat.solutions.processor;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +30,7 @@ import com.kirat.solutions.util.FileItException;
 public class AddFileProcessor {
 	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(AddFileProcessor.class);
 	FileItContext fileItContext;
-	List<String> pathNamesList = new ArrayList<String>();
+	Map<String, String> pathNamesList = new HashMap<String, String>();
 
 	public void addFilesToBinder(AddFileRequest oAddFileRequest) throws FileItException {
 		fileItLogger.info("Entering to Add File Processor");
@@ -59,9 +59,9 @@ public class AddFileProcessor {
 				topic.setAttribute(BinderConstants.TYPE, oAddFileRequest.getoBookRequests().get(i).getType());
 				topic.setAttribute(BinderConstants.VERSION, oAddFileRequest.getoBookRequests().get(i).getVersion());
 				topicRef.appendChild(topic);
-				pathNamesList.add(oAddFileRequest.getoBookRequests().get(i).getPath());
+				pathNamesList.put(oAddFileRequest.getoBookRequests().get(i).getName(), oAddFileRequest.getoBookRequests().get(i).getPath());
 			}
-			FileItContext.add(BinderConstants.CONTXT_PATH_NAMES, pathNamesList);
+			FileItContext.add(BinderConstants.CONTXT_DOC, pathNamesList);
 
 			// create the xml file
 			// transform the DOM Object to an XML File

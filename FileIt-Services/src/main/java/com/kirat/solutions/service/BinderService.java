@@ -151,5 +151,15 @@ public class BinderService {
 		}
 		return oArray;
 	}
+	
+	@POST
+	@Path("fetchImageDetails")
+	@Produces("application/json")
+	public JSONObject fetchImageDetails(String bookName) throws Exception {
+		String filePath = FileInfoPropertyReader.getInstance().getString("xml.file.path") + bookName + ".json";
+		JSONParser parser = new JSONParser();
+		JSONObject superObj = (JSONObject) parser.parse(new FileReader(filePath));
+		return superObj;
+	}
 
 }
