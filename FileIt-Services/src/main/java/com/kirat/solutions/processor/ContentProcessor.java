@@ -84,6 +84,29 @@ public class ContentProcessor {
 		}
 
 	}
+	
+	public static boolean deleteFileImage(String bookName, String fileName) throws FileItException{
+		try{
+			String filename = FileInfoPropertyReader.getInstance().getString("xml.file.path") + bookName + ContentProcessor.JSONExtention;
+			JSONObject superObj = (JSONObject) new JSONParser().parse(new FileReader(filename));
+			String extension = BinderConstants.IMG_EXTENSION;
+			JSONObject documentObject = (JSONObject) superObj.get(fileName);
+			for(int i=Integer.parseInt(documentObject.get("Start").toString()) + 1; i<=Integer.parseInt(documentObject.get("End").toString()); i++){
+				String imagePath = createDyanmicImagePath(i, bookName, extension);
+				new File(imagePath).delete();
+			}
+			superObj.remove(fileName);
+			FileWriter bookJsonFile = new FileWriter(filename);
+			bookJsonFile.write(superObj.toJSONString());
+			bookJsonFile.flush();
+			bookJsonFile.close();
+			return true;
+		}catch(ParseException pe){
+			throw new FileItException(pe.getMessage());
+		}catch (IOException ioe) {
+			throw new FileItException(ioe.getMessage());
+		}
+	}
 
 	public static String createDyanmicImagePath(int i, String bookName, String extension) {
 		boolean isDirectory = false;
