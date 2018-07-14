@@ -1,16 +1,16 @@
 package com.kirat.solutions.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.xml.parsers.DocumentBuilder;
@@ -40,6 +40,7 @@ import com.kirat.solutions.domain.CreateBinderRequest;
 import com.kirat.solutions.domain.CreateBinderResponse;
 import com.kirat.solutions.domain.DeleteBookRequest;
 import com.kirat.solutions.domain.DeleteFileRequest;
+import com.kirat.solutions.domain.DownloadFileRequest;
 import com.kirat.solutions.domain.SearchBookRequest;
 import com.kirat.solutions.domain.SearchBookResponse;
 import com.kirat.solutions.domain.UpdateBookRequest;
@@ -47,6 +48,7 @@ import com.kirat.solutions.processor.AddFileProcessor;
 import com.kirat.solutions.processor.BookTreeProcessor;
 import com.kirat.solutions.processor.ContentProcessor;
 import com.kirat.solutions.processor.DeleteBookProcessor;
+import com.kirat.solutions.processor.DownloadBookProcessor;
 import com.kirat.solutions.processor.LookupBookProcessor;
 import com.kirat.solutions.processor.TransformationProcessor;
 import com.kirat.solutions.processor.UpdateMasterJson;
@@ -214,6 +216,19 @@ public class BinderService {
 		JSONParser parser = new JSONParser();
 		JSONObject superObj = (JSONObject) parser.parse(new FileReader(filePath));
 		return superObj;
+	}
+	
+	
+	//Download Service for Standalone added 14/07/2018
+	
+	@POST
+	@Path("download")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public JSONObject downloadFile(DownloadFileRequest oDownloadFileRequest) throws Exception {
+		JSONObject obj = new JSONObject();
+		obj.put("URL", new DownloadBookProcessor().process(oDownloadFileRequest.getBookName()));
+		return obj;
 	}
 
 }
