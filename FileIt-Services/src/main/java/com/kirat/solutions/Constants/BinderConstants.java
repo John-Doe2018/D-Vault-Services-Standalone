@@ -13,4 +13,6 @@ public class BinderConstants {
 	public static final String EXTENSION = ".xml";
 	public static final String IMG_EXTENSION = ".jpg";
 	public static final String CONTXT_DOC = "CONTXT_DOC";
+	public static final String CONTXT_CLASSIFICATION = "CONTXT_CLASSIFICATION";
+	public static final String FILE_SEPARATOR = "\\";
 }

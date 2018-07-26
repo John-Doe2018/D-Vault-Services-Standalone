@@ -2,9 +2,7 @@ package com.kirat.solutions.processor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,9 +23,9 @@ import org.w3c.dom.Element;
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.Children;
-import com.kirat.solutions.domain.FileItContext;
 import com.kirat.solutions.logger.FILEITLogger;
 import com.kirat.solutions.logger.FILEITLoggerFactory;
+import com.kirat.solutions.util.FileItContext;
 import com.kirat.solutions.util.FileItException;
 import com.kirat.solutions.util.FileUtil;
 

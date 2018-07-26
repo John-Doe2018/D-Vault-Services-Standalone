@@ -18,8 +18,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.kirat.solutions.Constants.BinderConstants;
-import com.kirat.solutions.domain.FileItContext;
 import com.kirat.solutions.util.FileInfoPropertyReader;
+import com.kirat.solutions.util.FileItContext;
 import com.kirat.solutions.util.FileItException;
 
 public class ContentProcessor {

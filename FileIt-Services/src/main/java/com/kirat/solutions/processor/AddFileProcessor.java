@@ -21,10 +21,10 @@ import org.w3c.dom.Node;
 
 import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.AddFileRequest;
-import com.kirat.solutions.domain.FileItContext;
 import com.kirat.solutions.logger.FILEITLogger;
 import com.kirat.solutions.logger.FILEITLoggerFactory;
 import com.kirat.solutions.util.FileInfoPropertyReader;
+import com.kirat.solutions.util.FileItContext;
 import com.kirat.solutions.util.FileItException;
 
 public class AddFileProcessor {
