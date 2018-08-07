@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
@@ -34,6 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.kirat.solutions.Constants.BinderConstants;
 import com.kirat.solutions.domain.AddFileRequest;
 import com.kirat.solutions.domain.BinderList;
 import com.kirat.solutions.domain.CreateBinderRequest;
@@ -53,6 +56,7 @@ import com.kirat.solutions.processor.LookupBookProcessor;
 import com.kirat.solutions.processor.TransformationProcessor;
 import com.kirat.solutions.processor.UpdateMasterJson;
 import com.kirat.solutions.util.FileInfoPropertyReader;
+import com.kirat.solutions.util.FileItContext;
 import com.kirat.solutions.util.FileItException;
 import com.kirat.solutions.util.FileUtil;
 
@@ -71,8 +75,8 @@ public class BinderService {
 		UpdateMasterJson updateMasterJson = new UpdateMasterJson();
 		bookName = updateMasterJson.prepareMasterJson(listOfBinderObj);
 		// Prepare the Content Structure of the book with image
-		ContentProcessor contentProcessor = ContentProcessor.getInstance();
-		contentProcessor.processContentImage(bookName);
+		/*ContentProcessor contentProcessor = ContentProcessor.getInstance();
+		contentProcessor.processContentImage(bookName);*/
 		createBinderResponse.setSuccessMsg("Binder Successfully Created.");
 		return createBinderResponse;
 	}
@@ -108,7 +112,7 @@ public class BinderService {
 		try{
 			Element topicElement = null;
 			ContentProcessor contentProcessor = ContentProcessor.getInstance();
-			contentProcessor.deleteFileImage(oDeleteFileRequest.getBookName(), oDeleteFileRequest.getFileName());
+			//contentProcessor.deleteFileImage(oDeleteFileRequest.getBookName(), oDeleteFileRequest.getFileName());
 			String xmlfilePath = FileInfoPropertyReader.getInstance().getString("xml.file.path") + oDeleteFileRequest.getBookName()  + ".xml";
 			DocumentBuilderFactory docBuilderFac = DocumentBuilderFactory.newInstance();
 			docBuilderFac.setNamespaceAware(true);
@@ -211,11 +215,9 @@ public class BinderService {
 	@POST
 	@Path("fetchImageDetails")
 	@Produces("application/json")
-	public JSONObject fetchImageDetails(String bookName) throws Exception {
-		String filePath = FileInfoPropertyReader.getInstance().getString("xml.file.path") + bookName + ".json";
-		JSONParser parser = new JSONParser();
-		JSONObject superObj = (JSONObject) parser.parse(new FileReader(filePath));
-		return superObj;
+	public List<String> fetchImageDetails(String bookName) throws Exception {
+		ContentProcessor contentProcessor = ContentProcessor.getInstance();
+		return contentProcessor.processContentImage(bookName);
 	}
 	
 	
@@ -229,6 +231,17 @@ public class BinderService {
 		JSONObject obj = new JSONObject();
 		obj.put("URL", new DownloadBookProcessor().process(oDownloadFileRequest.getBookName()));
 		return obj;
+	}
+	
+	@POST
+	@Path("classifiedData")
+	public JSONObject getBookClassification() throws Exception {
+		/*if (FileItContext.get(BinderConstants.CLASSIFIED_BOOK_NAMES) == null) {
+			PrepareClassificationMap
+					.createClassifiedMap(FileInfoPropertyReader.getInstance().getString("masterjson.file.path"));
+		}*/
+		return (JSONObject) (Map<String, List<String>>)FileItContext.get(BinderConstants.CONTXT_CLASSIFICATION);
+
 	}
 
 }

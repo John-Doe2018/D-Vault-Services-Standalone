@@ -21,44 +21,45 @@ import com.kirat.solutions.util.FileItException;
 
 public class BookTreeProcessor {
 	private static final FILEITLogger fileItLogger = FILEITLoggerFactory.getLogger(BookTreeProcessor.class);
+
 	public JSONObject processBookXmltoDoc(String bookName) throws FileItException {
 		fileItLogger.info("Entering to Book Tree Processor");
-		
+
 		String line = "", str = "";
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = null;
 		JSONObject json;
 		try {
 			documentBuilder = documentFactory.newDocumentBuilder();
-		
-		String filePath = FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
-		String requiredXmlPath = "";
-		JSONParser parser = new JSONParser();
-		JSONObject array = null;
-			array = (JSONObject) parser.parse(new FileReader(filePath));
-		
-		JSONArray jsonArray = (JSONArray) array.get("BookList");
-		for (Object obj : jsonArray) {
-			JSONObject book = (JSONObject) obj;
-			if (book.containsKey(bookName)) {
-				JSONObject jsonObject = (JSONObject) book.get(bookName);
-				requiredXmlPath = (String) jsonObject.get("Path");
-			}
-		}
-		BufferedReader br =  null;
+			String requiredXmlPath = "";
+			JSONParser parser = new JSONParser();
+			/*
+			 * String filePath =
+			 * FileInfoPropertyReader.getInstance().getString("masterjson.file.path");
+			 * String requiredXmlPath = ""; JSONParser parser = new JSONParser(); JSONObject
+			 * array = null; array = (JSONObject) parser.parse(new FileReader(filePath));
+			 * 
+			 * JSONArray jsonArray = (JSONArray) array.get("BookList"); for (Object obj :
+			 * jsonArray) { JSONObject book = (JSONObject) obj; if
+			 * (book.containsKey(bookName)) { JSONObject jsonObject = (JSONObject)
+			 * book.get(bookName); requiredXmlPath = (String) jsonObject.get("Path"); } }
+			 */
+			requiredXmlPath = FileInfoPropertyReader.getInstance().getString("xml.file.path").concat(bookName)
+					.concat(".xml");
+			BufferedReader br = null;
 			br = new BufferedReader(new FileReader(requiredXmlPath));
-		
+
 			while ((line = br.readLine()) != null) {
 				str += line;
 			}
-		br.close();
-		org.json.JSONObject jsondata = XML.toJSONObject(str);
-		
+			br.close();
+			org.json.JSONObject jsondata = XML.toJSONObject(str);
+
 			json = (JSONObject) parser.parse(jsondata.toString());
-			} catch (ParserConfigurationException | ParseException | IOException e) {
-				// TODO Auto-generated catch block
-				throw new FileItException(e.getMessage());
-			}
+		} catch (ParserConfigurationException | ParseException | IOException e) {
+			// TODO Auto-generated catch block
+			throw new FileItException(e.getMessage());
+		}
 		return json;
 	}
 
