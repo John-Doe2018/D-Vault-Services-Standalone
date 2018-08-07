@@ -46,11 +46,10 @@ public class ClassificationMapUtil {
 			try {
 				FileReader fr = new FileReader(mapFile);
 				JSONParser parser = new JSONParser();
-				classificatioMap = (Map<String, List<String>>) parser.parse(fr);
-				FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, classificatioMap);
+				FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, parser.parse(fr));
 			} catch (IOException | ParseException e) {
 				classificatioMap.put("BlankArray", new ArrayList<>());
-				FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, classificatioMap);
+				FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, new JSONObject(classificatioMap));
 				//throw new FileItException(e.getMessage());
 			}
 		return true;
@@ -91,7 +90,7 @@ public class ClassificationMapUtil {
 		}
 		temp.add(bookName);
 		classificatioMap.put(classification, temp);
-		FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, classificatioMap);
+		FileItContext.add(BinderConstants.CONTXT_CLASSIFICATION, new JSONObject(classificatioMap));
 		addContextToMap();
 	}
 

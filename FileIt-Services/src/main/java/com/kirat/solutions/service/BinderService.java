@@ -240,7 +240,7 @@ public class BinderService {
 			PrepareClassificationMap
 					.createClassifiedMap(FileInfoPropertyReader.getInstance().getString("masterjson.file.path"));
 		}*/
-		return (JSONObject) (Map<String, List<String>>)FileItContext.get(BinderConstants.CONTXT_CLASSIFICATION);
+		return (JSONObject) FileItContext.get(BinderConstants.CONTXT_CLASSIFICATION);
 
 	}
 
